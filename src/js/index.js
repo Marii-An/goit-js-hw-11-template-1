@@ -95,18 +95,31 @@ async function clickOnLoad() {
 
   try {
     const { hits } = await getImages(query, currentPage);
-    refs.gallery.insertAdjacentHTML('beforeend', createGallery(hits));
-    refs.loadButton.classList.remove('is-hidden');
 
-    new SimpleLightbox('.link-lightbox', {
-      captionsData: 'alt',
-      captionDelay: 250,
-      captions: true,
-    }).refresh();
+    if (hits.length === 0) {
+      refs.loadButton.classList.add('is-hidden');
+      Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
+      return;
+    }
+
+    refs.gallery.insertAdjacentHTML('beforeend', createGallery(hits));
+
+    if (hits.length < perPage) {
+      refs.loadButton.classList.add('is-hidden');
+      Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
+    } else {
+      new SimpleLightbox('.link-lightbox', {
+        captionsData: 'alt',
+        captionDelay: 250,
+        captions: true,
+      }).refresh();
+    }
   } catch (error) {
     console.error(error);
-    Notiflix.Notify.failure(
-      "We're sorry, but you've reached the end of search results."
-    );
+    Notiflix.Notify.failure('Error fetching images');
   }
 }

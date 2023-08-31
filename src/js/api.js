@@ -26,5 +26,3 @@ const getImages = async (value, page) => {
 };
 
 export { getImages };
-
-// Параметр page: Ви передаєте page як параметр функції getImages, але не використовуєте його при виклику axios.get.
